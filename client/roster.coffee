@@ -137,12 +137,12 @@ emit = ($item, item) ->
   """
 
 bind = ($item, item) ->
-  $item.dblclick (e) ->
+  $item.on 'dblclick', (e) ->
     if e.shiftKey
       wiki.dialog "Roster Categories", "<pre>#{JSON.stringify $item.get(0).getRoster(), null, 2}</pre>"
     else
       wiki.textEditor $item, item
-  $item.find('.loadsites').click (e) ->
+  $item.find('.loadsites').on 'click', (e) ->
     e.preventDefault()
     e.stopPropagation()
     console.log 'roster sites', $(e.target).data('sites').split(' ')
