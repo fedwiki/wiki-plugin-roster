@@ -1,10 +1,11 @@
-###
+/*
  * Federated Wiki : Roster Plugin
  *
  * Licensed under the MIT license.
  * https://github.com/fedwiki/wiki-plugin-roster/blob/master/LICENSE.txt
-###
-#
+ */
+
+/*
 # Sample Roster Accessing Code
 #
 # Any item that exploses a roster will be identifed with class "roster-source".
@@ -19,135 +20,164 @@
 # This simplified version might be useful from the browser's javascript inspector.
 #
 #     $('.roster-source').get(0).getRoster()
+*/
 
-includes = {}
+const includes = {}
 
-escape = (text) ->
-  text
-    .replace /&/g, '&amp;'
-    .replace /</g, '&lt;'
-    .replace />/g, '&gt;'
+const escape = text => {
+  return text.replace(/&/g, '&amp;'.replace(/</g, '&lt;')).replace(/>/g, '&gt;')
+}
 
+const load_sites = uri => {
+  const tuples = uri.split(' ')
+  while (tuples.length) {
+    const site = tuples.shift()
+    wiki.neighborhoodObject.registerNeighbor(site)
+  }
+}
 
-load_sites = (uri) ->
-  tuples = uri.split ' '
-  while tuples.length
-    site = tuples.shift()
-    wiki.neighborhoodObject.registerNeighbor site
+const parse = ($item, item) => {
+  let roster = { all: [] }
+  let category = null
+  let lineup = []
+  let marks = {}
+  let lines = []
 
-parse = ($item, item) ->
-  roster = {all: []}
-  category = null
-  lineup = []
-  marks = {}
-  lines = []
+  if ($item != null) {
+    $item.addClass('roster-source')
+    $item.get(0).getRoster = () => {
+      return roster
+    }
+  }
 
-  if $item?
-    $item.addClass 'roster-source'
-    $item.get(0).getRoster = -> roster
+  const more = item.text.split(/\r?\n/)
 
-  more = item.text.split /\r?\n/
+  const flag = site => {
+    roster.all.push(site)
+    lineup.push(site)
+    const br = lineup.length >= 18 ? newline() : ''
+    return `<img class="remote" src="${wiki.site(site).flag()}" title="${site}" data-site="${site}" data-slug="welcome-visitors">${br}`
+  }
 
-  flag = (site) ->
-    roster.all.push site
-    lineup.push site
-    br = if lineup.length >= 18
-      newline()
-    else
-      ''
-    "<img class=\"remote\" src=\"#{wiki.site(site).flag()}\" title=\"#{site}\" data-site=\"#{site}\" data-slug=\"welcome-visitors\">#{br}"
-
-  newline = ->
-    if lineup.length
-      [sites, lineup] = [lineup, []]
-      if category?
+  const newline = () => {
+    if (lineup.length) {
+      let sites = []
+      ;[sites, lineup] = [lineup, []]
+      if (category != null) {
         roster[category] ||= []
-        roster[category].push site for site in sites
-      """ <a class='loadsites' href= "/#" data-sites="#{sites.join ' '}" title="add these #{sites.length} sites\nto neighborhood">»</a><br> """
-    else
-      "<br>"
+        sites.forEach(site => roster[category].push(site))
+      }
+      return ` <a class="loadsites" href="/#" data-sites="${sites.join(' ')}" title="add these ${sites.length} sites\nto neighborhood">»</a><br> `
+    } else {
+      return '<br>'
+    }
+  }
 
-  cat = (name) ->
-    category = name
+  const cat = name => {
+    return (category = name)
+  }
 
-  includeRoster = (line, siteslug) ->
-    if marks[siteslug]?
-      return "<span>trouble looping #{siteslug}</span>"
-    else
+  const includeRoster = (line, siteslug) => {
+    if (marks[siteslug] != null) {
+      return `<span>trouble looping ${siteslug}</span>`
+    } else {
       marks[siteslug] = true
-    if includes[siteslug]?
-      [].unshift.apply more, includes[siteslug]
-      ''
-    else
-      [site, slug] = siteslug.split('/')
-      wiki.site(site).get "#{slug}.json", (error, page) ->
-      # $.getJSON "//#{siteslug}.json", (page) ->
-        if error
-          console.log "unable to get #{siteslug}"
-        else
-          includes[siteslug] = ["<span>trouble loading #{siteslug}</span>"]
-          for i in page.story
-            if i.type is 'roster'
-              includes[siteslug] = i.text.split /\r?\n/
+    }
+    if (includes[siteslug] != null) {
+      ;[].unshift.apply(more, includes[siteslug])
+      return ''
+    } else {
+      const [site, slug] = siteslug.split('/')
+      wiki.site(site).get('#{slug}.json', (error, page) => {
+        // $.getJSON "//#{siteslug}.json", (page) ->
+        if (error) {
+          console.log(`unable to get ${siteslug}`)
+        } else {
+          includes[siteslug] = [`<span>trouble loading ${siteslug}</span>`]
+          for (const i in page.story) {
+            if (i.type === 'roster') {
+              includes[siteslug] = i.text.split(/\r?\n/)
               break
+            }
+          }
           $item.empty()
-          emit $item, item
-          bind $item, item
-      "<span>loading #{siteslug}</span>"
+          emit($item, item)
+          bind($item, item)
+        }
+        return `<span>loading ${siteslug}</span>`
+      })
+    }
+  }
 
-  includeReferences = (line, siteslug) ->
-    if includes[siteslug]?
-      [].unshift.apply more, includes[siteslug]
-      ''
-    else
-      [site, slug] = siteslug.split('/')
-      wiki.site(site).get "#{slug}.json", (error, page) ->
-      # $.getJSON "//#{siteslug}.json", (page) ->
-        if error
-          console.log "unable to get #{siteslug}"
-        else
+  const includeReferences = (line, siteslug) => {
+    if (includes[siteslug]) {
+      ;[].unshift.apply(more, includes[siteslug])
+      return ''
+    } else {
+      const [site, slug] = siteslug.split('/')
+      wiki.site(site).get('#{slug}.json', (error, page) => {
+        // $.getJSON "//#{siteslug}.json", (page) ->
+        if (error) {
+          console.log(`unable to get ${siteslug}"`)
+        } else {
           includes[siteslug] = []
-          for i in page.story
-            if i.type is 'reference'
-              includes[siteslug].push i.site if includes[siteslug].indexOf(i.site) < 0
+          for (const i in page.story)
+            if (i.type == 'reference') {
+              if (includes[siteslug].indexOf(i.site) < 0) {
+                includes[siteslug].push(i.site)
+              }
+            }
           $item.empty()
-          emit $item, item
-          bind $item, item
-      "<span>loading #{siteslug}</span>"
+          emit($item, item)
+          bind($item, item)
+        }
+      })
+      return `<span>loading ${siteslug}</span>`
+    }
+  }
+  const expand = text => {
+    return text
+      .replace(/^$/, newline)
+      .replace(/^([a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+)(:\d+)?$/, flag)
+      .replace(/^localhost(:\d+)?$/, flag)
+      .replace(/^ROSTER ([A-Za-z0-9.-:]+\/[a-z0-9-]+)$/, includeRoster)
+      .replace(/^REFERENCES ([A-Za-z0-9.-:]+\/[a-z0-9-]+)$/, includeReferences)
+      .replace(/^([^<].*)$/, cat)
+  }
 
-  expand = (text) ->
-    text
-      .replace /^$/, newline
-      .replace /^([a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+)(:\d+)?$/, flag
-      .replace /^localhost(:\d+)?$/, flag
-      .replace /^ROSTER ([A-Za-z0-9.-:]+\/[a-z0-9-]+)$/, includeRoster
-      .replace /^REFERENCES ([A-Za-z0-9.-:]+\/[a-z0-9-]+)$/, includeReferences
-      .replace /^([^<].*)$/, cat
+  while (more.length) {
+    lines.push(expand(more.shift()))
+  }
+  lines.push(newline())
+  return lines.join(' ')
+}
 
-  while more.length
-    lines.push expand more.shift()
-  lines.push newline()
-  lines.join ' '
-
-emit = ($item, item) ->
-  $item.append """
+const emit = ($item, item) => {
+  $item.append(`
     <p style="background-color:#eee;padding:15px;">
-      #{parse $item, item}
+      ${parse($item, item)}
     </p>
-  """
+  `)
+}
 
-bind = ($item, item) ->
-  $item.on 'dblclick', (e) ->
-    if e.shiftKey
-      wiki.dialog "Roster Categories", "<pre>#{JSON.stringify $item.get(0).getRoster(), null, 2}</pre>"
-    else
-      wiki.textEditor $item, item
-  $item.find('.loadsites').on 'click', (e) ->
+const bind = ($item, item) => {
+  $item.on('dblclick', e => {
+    if (e.shiftKey) {
+      wiki.dialog(`Roster Categories`, `<pre>${JSON.stringify($item.get(0).getRoster(), null, 2)}</pre>`)
+    } else {
+      wiki.textEditor($item, item)
+    }
+  })
+  $item.find('.loadsites').on('click', e => {
     e.preventDefault()
     e.stopPropagation()
-    console.log 'roster sites', $(e.target).data('sites').split(' ')
-    load_sites $(e.target).data('sites')
+    console.log('roster sites', $(e.target).data('sites').split(' '))
+    load_sites($(e.target).data('sites'))
+  })
+}
 
+if (typeof window !== 'undefined') {
+  window.plugins.roster = { emit, bind }
+}
 
-window.plugins.roster = {emit, bind} if window?
-module.exports = {parse, includes} if module?
+export const roster = typeof window == 'undefined' ? { parse } : undefined
