@@ -29,17 +29,17 @@
     {
       "type": "roster",
       "id": "b069226796619d55",
-      "text": "Ward Cunningham\nward.fed.wiki.org\nward.asia.wiki.org\n\nMike Caulfield\nmachines.hapgood.net\norientation.hapgood.net"
+      "text": "Ward Cunningham\nward.fed.wiki.org\nward.asia.wiki.org\n\nMarc Pierson\nmarc.tries.fed.wiki\nmarc.relocalizecreativity.net"
     },
     {
       "type": "roster",
       "id": "18128a9f15326a78",
-      "text": "ward.fed.wiki.org\nward.asia.wiki.org\nWard Cunningham\n\nmachines.hapgood.net\norientation.hapgood.net\nMike Caulfield"
+      "text": "ward.fed.wiki.org\nward.asia.wiki.org\nWard Cunningham\n\nmarc.tries.fed.wiki\nmarc.relocalizecreativity.net\nMarc Pierson"
     },
     {
       "type": "roster",
       "id": "d6c2f5d665498da5",
-      "text": "ward.fed.wiki.org\nWard Cunningham\nward.asia.wiki.org\n\nmachines.hapgood.net\nMike Caulfield\norientation.hapgood.net"
+      "text": "ward.fed.wiki.org\nWard Cunningham\nward.asia.wiki.org\n\nmarc.tries.fed.wiki\nMarc Pierson\nmarc.relocalizecreativity.net\n"
     },
     {
       "type": "paragraph",
@@ -49,7 +49,7 @@
     {
       "type": "roster",
       "id": "47acecff23d5ae5a",
-      "text": "ward.fed.wiki.org\nward.asia.wiki.org\n\nMike Caulfield\nmachines.hapgood.net\norientation.hapgood.net"
+      "text": "ward.fed.wiki.org\nward.asia.wiki.org\n\nMarc Pierson\nmarc.tries.fed.wiki\nmarc.relocalizecreativity.net"
     },
     {
       "type": "paragraph",
@@ -330,6 +330,46 @@
         "text": "See [[About Activity Configuration]] for possible uses."
       },
       "date": 1433106685070
+    },
+    {
+      "type": "edit",
+      "id": "b069226796619d55",
+      "item": {
+        "type": "roster",
+        "id": "b069226796619d55",
+        "text": "Ward Cunningham\nward.fed.wiki.org\nward.asia.wiki.org\n\nMarc Pierson\nmarc.tries.fed.wiki\nmarc.relocalizecreativity.net"
+      },
+      "date": 1738476111856
+    },
+    {
+      "type": "edit",
+      "id": "18128a9f15326a78",
+      "item": {
+        "type": "roster",
+        "id": "18128a9f15326a78",
+        "text": "ward.fed.wiki.org\nward.asia.wiki.org\nWard Cunningham\n\nmarc.tries.fed.wiki\nmarc.relocalizecreativity.net\nMarc Pierson"
+      },
+      "date": 1738476136305
+    },
+    {
+      "type": "edit",
+      "id": "d6c2f5d665498da5",
+      "item": {
+        "type": "roster",
+        "id": "d6c2f5d665498da5",
+        "text": "ward.fed.wiki.org\nWard Cunningham\nward.asia.wiki.org\n\nmarc.tries.fed.wiki\nMarc Pierson\nmarc.relocalizecreativity.net\n"
+      },
+      "date": 1738476162991
+    },
+    {
+      "type": "edit",
+      "id": "47acecff23d5ae5a",
+      "item": {
+        "type": "roster",
+        "id": "47acecff23d5ae5a",
+        "text": "ward.fed.wiki.org\nward.asia.wiki.org\n\nMarc Pierson\nmarc.tries.fed.wiki\nmarc.relocalizecreativity.net"
+      },
+      "date": 1738476214169
     }
   ]
 }

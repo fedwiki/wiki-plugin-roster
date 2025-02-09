@@ -1,6 +1,6 @@
 {
   "name": "wiki-plugin-roster",
-  "version": "0.3.0",
+  "version": "0.4.0-rc.0",
   "description": "Federated Wiki - Roster Plugin",
   "keywords": [
     "roster",
@@ -15,18 +15,19 @@
   },
   "contributors": [],
   "scripts": {
-    "test": "mocha"
+    "build": "npm run clean; npm run test; node scripts/build-client.js",
+    "clean": "rm client/roster.js client/roster.js.map",
+    "test": "node --test",
+    "update-authors": "node scripts/update-authors.cjs"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@babel/preset-env": "^7.23.2",
+    "@eslint/js": "^9.18.0",
+    "esbuild": "^0.24.2",
+    "eslint": "^9.18.0",
     "expect.js": "*",
-    "grunt": "^1.0.4",
-    "grunt-contrib-coffee": "^2.1.0",
-    "grunt-contrib-watch": "^1.1.0",
+    "globals": "^15.14.0",
     "grunt-git-authors": "^3.2.0",
-    "grunt-mocha-test": "^0.13.3",
-    "mocha": "^10.2.0"
+    "prettier": "^3.4.2"
   },
   "license": "MIT",
   "repository": {
@@ -36,7 +37,8 @@
   "bugs": {
     "url": "https://github.com/fedwiki/wiki-plugin-roster/issues"
   },
+  "type": "module",
   "engines": {
-    "node": ">=6.x"
+    "node": ">=18.x"
   }
 }
