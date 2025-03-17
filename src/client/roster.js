@@ -88,13 +88,12 @@ const parse = ($item, item) => {
       return ''
     } else {
       const [site, slug] = siteslug.split('/')
-      wiki.site(site).get('#{slug}.json', (error, page) => {
-        // $.getJSON "//#{siteslug}.json", (page) ->
+      wiki.site(site).get(`${slug}.json`, (error, page) => {
         if (error) {
           console.log(`unable to get ${siteslug}`)
         } else {
           includes[siteslug] = [`<span>trouble loading ${siteslug}</span>`]
-          for (const i in page.story) {
+          for (const i of page.story) {
             if (i.type === 'roster') {
               includes[siteslug] = i.text.split(/\r?\n/)
               break
@@ -115,13 +114,12 @@ const parse = ($item, item) => {
       return ''
     } else {
       const [site, slug] = siteslug.split('/')
-      wiki.site(site).get('#{slug}.json', (error, page) => {
-        // $.getJSON "//#{siteslug}.json", (page) ->
+      wiki.site(site).get(`${slug}.json`, (error, page) => {
         if (error) {
           console.log(`unable to get ${siteslug}"`)
         } else {
           includes[siteslug] = []
-          for (const i in page.story)
+          for (const i of page.story)
             if (i.type == 'reference') {
               if (includes[siteslug].indexOf(i.site) < 0) {
                 includes[siteslug].push(i.site)
@@ -140,8 +138,8 @@ const parse = ($item, item) => {
       .replace(/^$/, newline)
       .replace(/^([a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+)(:\d+)?$/, flag)
       .replace(/^localhost(:\d+)?$/, flag)
-      .replace(/^ROSTER ([A-Za-z0-9.-:]+\/[a-z0-9-]+)$/, includeRoster)
-      .replace(/^REFERENCES ([A-Za-z0-9.-:]+\/[a-z0-9-]+)$/, includeReferences)
+      .replace(/^ROSTER ([A-Za-z0-9.\-:]+\/[a-z0-9-]+)$/, includeRoster)
+      .replace(/^REFERENCES ([A-Za-z0-9.\-:]+\/[a-z0-9-]+)$/, includeReferences)
       .replace(/^([^<].*)$/, cat)
   }
 
